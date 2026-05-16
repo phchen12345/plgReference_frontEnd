@@ -1,8 +1,10 @@
 import { requestJson } from "@/lib/api/client";
 import type { GameBoxscore } from "../types/games";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export function getGameBoxscore(gameId: string | number) {
   return requestJson<GameBoxscore>(
-    `http://localhost:3100/api/games/${gameId}/boxscore`,
+    `${API_BASE_URL}/api/games/${gameId}/boxscore`,
   );
 }
