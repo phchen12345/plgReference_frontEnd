@@ -21,8 +21,6 @@ export async function getSchedule({
     season,
   });
 
-  console.log(API_BASE_URL);
-
   return requestJson<ScheduleGame[]>(
     `${API_BASE_URL}/api/schedule?${searchParams}`,
     {
