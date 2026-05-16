@@ -24,7 +24,7 @@ export async function getSchedule({
   return requestJson<ScheduleGame[]>(
     `${API_BASE_URL}/api/schedule?${searchParams}`,
     {
-      revalidate: 3600,
+      revalidate: 60,
     },
   );
 }
