@@ -10,6 +10,13 @@ import { TeamStatsSection } from "@/features/games/components/team-stats/TeamSta
 
 import { DonutChartSection } from "@/features/games/components/donutChart/DonutChartSection";
 import { LazyPlayerStatsSection } from "@/features/games/components/player-stats/LazyPlayerStatsSection";
+
+export const revalidate = 60;
+
+export async function generateStaticParams(): Promise<{ gameId: string }[]> {
+  return [];
+}
+
 type PageProps = {
   params: Promise<{
     gameId: string;
