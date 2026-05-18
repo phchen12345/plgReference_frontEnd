@@ -41,7 +41,11 @@ export default async function HomePage() {
   }
 
   return (
-    <Box minH="100vh" bg="gray.50" _dark={{ bg: "gray.950", color: "gray.100" }}>
+    <Box
+      minH="100vh"
+      bg="gray.50"
+      _dark={{ bg: "gray.950", color: "gray.100" }}
+    >
       <Box as="main" px={{ base: 4, md: 8 }} py={8} maxW="1120px" mx="auto">
         <Stack gap={6}>
           <Flex
