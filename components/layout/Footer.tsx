@@ -3,7 +3,12 @@ import { Box, HStack, Link, Stack, Text } from "@chakra-ui/react";
 export default function Footer() {
   return (
     <>
-      <Box bg="gray.100" alignItems="center" justifyItems="center">
+      <Box
+        bg="gray.100"
+        alignItems="center"
+        justifyItems="center"
+        _dark={{ bg: "gray.800" }}
+      >
         <Stack fontSize="sm" color="gray.500">
           <HStack p={4}>
             <Text>本站非官方數據平台，資料來源</Text>
@@ -11,6 +16,7 @@ export default function Footer() {
               variant="underline"
               href="https://pleagueofficial.com/"
               color="gray.700"
+              _dark={{ color: "whiteAlpha.700" }}
             >
               PLG官方網站
             </Link>
