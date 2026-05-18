@@ -9,8 +9,7 @@ import { PointsDistributed } from "@/features/games/components/PointsDistributed
 import { TeamStatsSection } from "@/features/games/components/team-stats/TeamStatsSection";
 
 import { DonutChartSection } from "@/features/games/components/donutChart/DonutChartSection";
-import { PlayerStatsSection } from "@/features/games/components/player-stats/PlayerStatsSection";
-
+import { LazyPlayerStatsSection } from "@/features/games/components/player-stats/LazyPlayerStatsSection";
 type PageProps = {
   params: Promise<{
     gameId: string;
@@ -64,7 +63,7 @@ export default async function GameStatsPage({ params }: PageProps) {
       </HStack>
       <TeamStatsSection teams={teams} />
       <DonutChartSection teams={teams} />
-      <PlayerStatsSection teams={teams} />
+      <LazyPlayerStatsSection teams={teams} />
 
       <Stack maxW="1120px" mx="auto" gap={6}></Stack>
     </Box>
