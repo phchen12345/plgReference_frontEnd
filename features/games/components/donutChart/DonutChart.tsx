@@ -4,7 +4,7 @@ import { Chart, useChart } from "@chakra-ui/charts";
 import { Pie, PieChart, Sector, Tooltip } from "recharts";
 import { GameBoxscore, TeamBoxscoreStats } from "../../types/games";
 import { getTeamColor } from "../../utils/teamColors";
-import { HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 
 type DonutChartProps = {
   title: string;
@@ -33,13 +33,27 @@ export function DonutChart({ title, teams, statKey }: DonutChartProps) {
   });
   return (
     <VStack display="flex" flex="1">
-      <Text>{title}</Text>
+      <Box justifyItems="center" alignItems="center">
+        <Text>{title}</Text>
+      </Box>
       <HStack>
-        <VStack gap={0}>
-          <Text fontSize="5xl" color={getTeamColor(teams.away.team).solid}>
+        <VStack gap={0} w="120px" flexShrink={0} align="center">
+          <Text
+            fontSize="5xl"
+            color={getTeamColor(teams.away.team).solid}
+            textAlign="center"
+            lineHeight="1"
+          >
             {teams.away.stats?.[statKey]}
           </Text>
-          <Text color="gray.500" fontSize="2xl" _dark={{ color: "gray.400" }}>
+
+          <Text
+            color="gray.500"
+            fontSize="2xl"
+            textAlign="center"
+            whiteSpace="nowrap"
+            _dark={{ color: "gray.400" }}
+          >
             {teams.away.team.shortName}
           </Text>
         </VStack>
@@ -66,11 +80,23 @@ export function DonutChart({ title, teams, statKey }: DonutChartProps) {
             />
           </PieChart>
         </Chart.Root>
-        <VStack gap={0}>
-          <Text fontSize="5xl" color={getTeamColor(teams.home.team).solid}>
+        <VStack gap={0} w="120px" flexShrink={0} align="center">
+          <Text
+            fontSize="5xl"
+            color={getTeamColor(teams.home.team).solid}
+            textAlign="center"
+            lineHeight="1"
+          >
             {teams.home.stats?.[statKey]}
           </Text>
-          <Text color="gray.500" fontSize="2xl" _dark={{ color: "gray.400" }}>
+
+          <Text
+            color="gray.500"
+            fontSize="2xl"
+            textAlign="center"
+            whiteSpace="nowrap"
+            _dark={{ color: "gray.400" }}
+          >
             {teams.home.team.shortName}
           </Text>
         </VStack>
