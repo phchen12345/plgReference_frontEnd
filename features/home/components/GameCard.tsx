@@ -12,7 +12,11 @@ const statusLabels = {
 
 export function GameCard({ game }: { game: ScheduleGame }) {
   return (
-    <Link href={`/games/${game.id}`} style={{ textDecoration: "none" }}>
+    <Link
+      href={`/games/${game.id}`}
+      prefetch={false}
+      style={{ textDecoration: "none" }}
+    >
       <Box
         bg="white"
         border="1px solid"
