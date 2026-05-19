@@ -10,11 +10,19 @@ import { TeamStatsSection } from "@/features/games/components/team-stats/TeamSta
 
 import { DonutChartSection } from "@/features/games/components/donutChart/DonutChartSection";
 import { LazyPlayerStatsSection } from "@/features/games/components/player-stats/LazyPlayerStatsSection";
+import { getSchedule } from "@/features/home/api/schedulesApi";
 
-export const revalidate = 60;
+export async function generateStaticParams() {
+  const games = await getSchedule({
+    leagueCode: "PLG",
+    season: "2025-26",
+  });
 
-export async function generateStaticParams(): Promise<{ gameId: string }[]> {
-  return [];
+  return games
+    .filter((game) => game.status === "final")
+    .map((game) => ({
+      gameId: String(game.id),
+    }));
 }
 
 type PageProps = {
