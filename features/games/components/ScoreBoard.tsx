@@ -12,6 +12,15 @@ export function ScoreBoard({ game }: ScoreBoardProps) {
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .slice(0, 3);
 
+  const awayScore = game.awayScore;
+  const homeScore = game.homeScore;
+
+  const awayIsLosing =
+    awayScore != null && homeScore != null && awayScore < homeScore;
+
+  const homeIsLosing =
+    awayScore != null && homeScore != null && homeScore < awayScore;
+
   return (
     <Box
       bg="white"
@@ -29,7 +38,12 @@ export function ScoreBoard({ game }: ScoreBoardProps) {
           //   maxW="760px"
         >
           <HStack justify="end" minW={0} gap={3}>
-            <Text fontSize="2xl" fontWeight="bold" truncate>
+            <Text
+              fontSize="2xl"
+              fontWeight="bold"
+              truncate
+              color={awayIsLosing ? "gray.400" : "inherit"}
+            >
               {game.awayTeam.name}
             </Text>
             <Image
@@ -40,17 +54,20 @@ export function ScoreBoard({ game }: ScoreBoardProps) {
             />
           </HStack>
 
-          <Text fontSize="3xl" fontWeight="bold">
-            {game.awayScore ?? "-"}
+          <Text
+            fontSize="3xl"
+            fontWeight="bold"
+            color={awayIsLosing ? "gray.400" : "inherit"}
+          >
+            {awayScore ?? "-"}
           </Text>
 
           <Text
             fontSize="3xl"
             fontWeight="bold"
-            color="gray.400"
-            _dark={{ color: "gray.500" }}
+            color={homeIsLosing ? "gray.400" : "inherit"}
           >
-            {game.homeScore ?? "-"}
+            {homeScore ?? "-"}
           </Text>
 
           <HStack justify="start" minW={0} gap={3}>
@@ -63,9 +80,8 @@ export function ScoreBoard({ game }: ScoreBoardProps) {
             <Text
               fontSize="2xl"
               fontWeight="bold"
-              color="gray.400"
               truncate
-              _dark={{ color: "gray.500" }}
+              color={homeIsLosing ? "gray.400" : "inherit"}
             >
               {game.homeTeam.name}
             </Text>
