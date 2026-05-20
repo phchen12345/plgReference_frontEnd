@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { Box, HStack, Stack, Text } from "@chakra-ui/react";
+import { Suspense } from "react";
+import { Box, HStack, Skeleton, Stack, Text } from "@chakra-ui/react";
 
 import { getGameBoxscore } from "@/features/games/api/gamesApi";
 import { ScoreBoard } from "@/features/games/components/ScoreBoard";
@@ -34,16 +35,6 @@ type PageProps = {
 export default async function GameStatsPage({ params }: PageProps) {
   const { gameId } = await params;
 
-  let boxscore;
-
-  try {
-    boxscore = await getGameBoxscore(gameId);
-  } catch {
-    notFound();
-  }
-
-  const { game, teams } = boxscore;
-
   return (
     <Box
       minH="100vh"
@@ -67,6 +58,26 @@ export default async function GameStatsPage({ params }: PageProps) {
           </Text>
         </Link>
       </Box>
+      <Suspense fallback={<GameStatsSkeleton />}>
+        <GameStatsContent gameId={gameId} />
+      </Suspense>
+    </Box>
+  );
+}
+
+async function GameStatsContent({ gameId }: { gameId: string }) {
+  let boxscore;
+
+  try {
+    boxscore = await getGameBoxscore(gameId);
+  } catch {
+    notFound();
+  }
+
+  const { game, teams } = boxscore;
+
+  return (
+    <>
       <ScoreBoard game={game} teams={teams} />
       <HStack align="stretch" gap={4} mt={4} w="full">
         <Box display="flex" flex="1" minW={0}>
@@ -81,6 +92,48 @@ export default async function GameStatsPage({ params }: PageProps) {
       <LazyPlayerStatsSection teams={teams} />
 
       <Stack maxW="1120px" mx="auto" gap={6}></Stack>
-    </Box>
+    </>
+  );
+}
+
+function GameStatsSkeleton() {
+  return (
+    <Stack gap={4}>
+      <Box
+        bg="white"
+        borderBottom="1px solid"
+        borderColor="gray.200"
+        py={8}
+        _dark={{ bg: "gray.900", borderColor: "gray.700" }}
+      >
+        <Stack align="center" gap={4}>
+          <HStack gap={6}>
+            <Skeleton boxSize="56px" borderRadius="full" />
+            <Skeleton height="44px" width="160px" />
+            <Skeleton boxSize="56px" borderRadius="full" />
+          </HStack>
+
+          <Skeleton height="18px" width="320px" maxW="full" />
+        </Stack>
+      </Box>
+
+      <HStack align="stretch" gap={4} mt={4} w="full">
+        <Skeleton height="180px" flex="1" borderRadius="md" />
+        <Skeleton height="180px" flex="1" borderRadius="md" />
+      </HStack>
+
+      <Skeleton height="280px" borderRadius="md" />
+
+      <HStack gap={4} w="full">
+        <Skeleton height="240px" flex="1" borderRadius="md" />
+        <Skeleton height="240px" flex="1" borderRadius="md" />
+        <Skeleton height="240px" flex="1" borderRadius="md" />
+      </HStack>
+
+      <Stack gap={3} mt={4}>
+        <Skeleton height="36px" />
+        <Skeleton height="260px" />
+      </Stack>
+    </Stack>
   );
 }
