@@ -349,6 +349,6 @@ export const advancedStatRows = [
   stat(
     "效率值 EFF",
     "efficiency",
-    "API 回傳的效率值。常見公式會把得分、籃板、助攻、抄截、阻攻加總，再扣掉出手未進、罰球未進和失誤。",
+    "公式 : (得分 + 籃板 + 助攻 + 抄截 + 阻攻) - (出手未進 + 罰球未進 + 失誤)。",
   ),
 ] satisfies StatRow[];
