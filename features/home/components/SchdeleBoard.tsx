@@ -3,14 +3,18 @@
 import { useMemo, useState } from "react";
 import { createListCollection, Portal, Select, Stack } from "@chakra-ui/react";
 import type { ScheduleGame } from "@/features/home/types/schedules";
-import GameSection from "./SimpleGrid";
+import GameSection from "./SimpleGird";
+import { useFavoriteTeamsStore } from "@/stores/useFavoriteTeamsStore";
 
 type Props = {
   games: ScheduleGame[];
 };
 
 export default function ScheduleBoard({ games }: Props) {
-  const [selectedTeam, setSelectedTeam] = useState("all");
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const favoriteTeams = useFavoriteTeamsStore((state) => state.favoriteTeams);
+  const favoriteTeamIds = favoriteTeams.map((team) => team.id);
 
   const teamCollection = useMemo(() => {
     const teamMap = new Map<string, string>();
@@ -23,6 +27,7 @@ export default function ScheduleBoard({ games }: Props) {
     return createListCollection({
       items: [
         { label: "全部球隊", value: "all" },
+        { label: "關注球隊", value: "favorites" },
         ...Array.from(teamMap, ([value, label]) => ({
           label,
           value,
@@ -32,14 +37,24 @@ export default function ScheduleBoard({ games }: Props) {
   }, [games]);
 
   const filteredGames = useMemo(() => {
-    if (selectedTeam === "all") return games;
+    if (selectedFilter === "all") {
+      return games;
+    }
+
+    if (selectedFilter === "favorites") {
+      return games.filter(
+        (game) =>
+          favoriteTeamIds.includes(game.homeTeam.id) ||
+          favoriteTeamIds.includes(game.awayTeam.id),
+      );
+    }
 
     return games.filter(
       (game) =>
-        String(game.homeTeam.id) === selectedTeam ||
-        String(game.awayTeam.id) === selectedTeam,
+        String(game.homeTeam.id) === selectedFilter ||
+        String(game.awayTeam.id) === selectedFilter,
     );
-  }, [games, selectedTeam]);
+  }, [games, selectedFilter, favoriteTeamIds]);
 
   const finishedGames = [...filteredGames]
     .filter((game) => game.status === "final")
@@ -56,9 +71,9 @@ export default function ScheduleBoard({ games }: Props) {
     <Stack gap={6}>
       <Select.Root
         collection={teamCollection}
-        value={[selectedTeam]}
+        value={[selectedFilter]}
         onValueChange={(details) => {
-          setSelectedTeam(details.value[0] ?? "all");
+          setSelectedFilter(details.value[0] ?? "all");
         }}
         size="sm"
         width={{ base: "full", md: "320px" }}

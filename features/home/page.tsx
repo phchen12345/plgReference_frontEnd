@@ -3,6 +3,7 @@ import { Badge, Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { getSchedule } from "@/features/home/api/schedulesApi";
 import type { ScheduleGame } from "@/features/home/types/schedules";
 import ScheduleBoard from "./components/SchdeleBoard";
+import SelectFavoriteTeams from "./components/SelectFavoriteTeams";
 
 const LEAGUE_CODE = "PLG";
 const SEASON = "2025-26";
@@ -40,6 +41,12 @@ export default async function HomePage() {
     errorMessage = error instanceof Error ? error.message : "賽程資料讀取失敗";
   }
 
+  //給SelectFavoriteTeams的資料
+  const allTeams = games.flatMap((game) => [game.homeTeam, game.awayTeam]);
+
+  const uniqueTeams = Array.from(
+    new Map(allTeams.map((team) => [team.id, team])).values(),
+  );
   return (
     <Box
       minH="100vh"
@@ -71,6 +78,7 @@ export default async function HomePage() {
               {games.length} 場比賽
             </Badge>
           </Flex>
+          <SelectFavoriteTeams uniqueTeams={uniqueTeams}></SelectFavoriteTeams>
 
           {errorMessage ? (
             <Box

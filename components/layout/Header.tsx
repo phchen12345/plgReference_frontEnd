@@ -1,15 +1,15 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  IconButton,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+"use client";
+
+import { Box, Flex, HStack, IconButton, Stack, Text } from "@chakra-ui/react";
 import { Menu as MenuIcon } from "lucide-react";
 import { ColorModeButton } from "./ColorModeButton";
+import { useFavoriteTeamsStore } from "@/stores/useFavoriteTeamsStore";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function Header() {
+  const favoriteTeams = useFavoriteTeamsStore((state) => state.favoriteTeams);
+
   return (
     <Box
       as="header"
@@ -42,6 +42,27 @@ export function Header() {
               REFERENCE
             </Text>
           </Stack>
+          <motion.div
+            animate={{ x: [0, -6, 6, -6, 0] }}
+            transition={{
+              duration: 1.6,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <HStack>
+              {favoriteTeams.map((team) => (
+                <Box key={team.id}>
+                  <Image
+                    src={team.logoUrl}
+                    alt={team.name}
+                    width={48}
+                    height={48}
+                  />
+                </Box>
+              ))}
+            </HStack>
+          </motion.div>
         </HStack>
 
         <HStack gap={2} display={{ base: "none", md: "flex" }}>
