@@ -37,7 +37,7 @@ function getSortMark(sortDirection: false | "asc" | "desc") {
 function getCellTextAlign(columnId: string): TextProps["textAlign"] {
   if (columnId === "player") return "left";
   if (columnId === "position") return "center";
-  return "right";
+  return "center";
 }
 
 function getColumnMinWidth(columnId: string) {
