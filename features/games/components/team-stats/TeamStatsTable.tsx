@@ -49,7 +49,7 @@ export function TeamStatsTable({
       >
         <Text fontWeight="semibold">{title}</Text>
 
-        <HStack gap={4} fontSize="sm">
+        <HStack gap={4} fontSize="sm" flexWrap="wrap" justify="flex-end">
           <HStack gap={1.5}>
             <Box boxSize="10px" bg={awayTeamColor.solid} borderRadius="full" />
             <Image

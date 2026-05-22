@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, SimpleGrid } from "@chakra-ui/react";
 import type { GameBoxscore } from "@/features/games/types/games";
 
 const DonutChart = dynamic(
@@ -25,7 +25,9 @@ const DonutChart = dynamic(
 
 export function DonutChartSection({ teams }: { teams: GameBoxscore["teams"] }) {
   return (
-    <HStack
+    <SimpleGrid
+      columns={{ base: 1, xl: 3 }}
+      gap={4}
       w="full"
       my={4}
       py={4}
@@ -43,6 +45,6 @@ export function DonutChartSection({ teams }: { teams: GameBoxscore["teams"] }) {
         teams={teams}
         statKey="pointsFromSecondChance"
       />
-    </HStack>
+    </SimpleGrid>
   );
 }

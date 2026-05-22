@@ -79,14 +79,20 @@ async function GameStatsContent({ gameId }: { gameId: string }) {
   return (
     <>
       <ScoreBoard game={game} teams={teams} />
-      <HStack align="stretch" gap={4} mt={4} w="full">
+      <Stack
+        align="stretch"
+        direction={{ base: "column", xl: "row" }}
+        gap={4}
+        mt={4}
+        w="full"
+      >
         <Box display="flex" flex="1" minW={0}>
           <LineScore teams={teams} />
         </Box>
         <Box display="flex" flex="1" minW={0}>
           <PointsDistributed teams={teams} />
         </Box>
-      </HStack>
+      </Stack>
       <TeamStatsSection teams={teams} />
       <DonutChartSection teams={teams} />
       <LazyPlayerStatsSection teams={teams} />
@@ -117,18 +123,24 @@ function GameStatsSkeleton() {
         </Stack>
       </Box>
 
-      <HStack align="stretch" gap={4} mt={4} w="full">
+      <Stack
+        align="stretch"
+        direction={{ base: "column", xl: "row" }}
+        gap={4}
+        mt={4}
+        w="full"
+      >
         <Skeleton height="180px" flex="1" borderRadius="md" />
         <Skeleton height="180px" flex="1" borderRadius="md" />
-      </HStack>
+      </Stack>
 
       <Skeleton height="280px" borderRadius="md" />
 
-      <HStack gap={4} w="full">
+      <Stack direction={{ base: "column", xl: "row" }} gap={4} w="full">
         <Skeleton height="240px" flex="1" borderRadius="md" />
         <Skeleton height="240px" flex="1" borderRadius="md" />
         <Skeleton height="240px" flex="1" borderRadius="md" />
-      </HStack>
+      </Stack>
 
       <Stack gap={3} mt={4}>
         <Skeleton height="36px" />

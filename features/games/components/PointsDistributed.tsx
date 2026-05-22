@@ -25,10 +25,10 @@ export function PointsDistributed({ teams }: LineScoreProps) {
     >
       <Text p={4}>球隊得分分佈</Text>
 
-      <Flex pb={4} px={4} gap={4}>
+      <Flex direction={{ base: "column", xl: "row" }} pb={4} px={4} gap={4}>
         <Box w="100%">
           <Stack>
-            <HStack justify="space-between">
+            <HStack justify="space-between" wrap="wrap">
               <HStack>
                 <Image
                   src={teams.away.team.logoUrl}
@@ -53,7 +53,7 @@ export function PointsDistributed({ teams }: LineScoreProps) {
         </Box>
         <Box w="100%">
           <Stack>
-            <HStack justify="space-between">
+            <HStack justify="space-between" wrap="wrap">
               <HStack>
                 <Image
                   src={teams.home.team.logoUrl}

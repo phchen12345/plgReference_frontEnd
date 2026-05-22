@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, CheckboxCard, For, Text, Box } from "@chakra-ui/react";
+import { CheckboxCard, For, Text, Box, Flex } from "@chakra-ui/react";
 import { Team } from "../types/schedules";
 import Image from "next/image";
 import { useFavoriteTeamsStore } from "@/stores/useFavoriteTeamsStore";
@@ -21,7 +21,7 @@ export default function SelectFavoriteTeams({ uniqueTeams }: Props) {
         <Text pb={2} color="gray.500">
           選擇你關注的球隊
         </Text>
-        <HStack>
+        <Flex gap={3} wrap="wrap">
           <For each={uniqueTeams}>
             {(team) => {
               const checked = favoriteTeams.some((item) => item.id === team.id);
@@ -50,7 +50,7 @@ export default function SelectFavoriteTeams({ uniqueTeams }: Props) {
               );
             }}
           </For>
-        </HStack>
+        </Flex>
       </Box>
     </>
   );

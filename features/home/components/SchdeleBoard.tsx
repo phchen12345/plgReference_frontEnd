@@ -105,7 +105,7 @@ export default function ScheduleBoard({ games }: Props) {
           </Select.Positioner>
         </Portal>
       </Select.Root>
-      <Stack gap={8} direction="row">
+      <Stack gap={8} direction={{ base: "column", xl: "row" }}>
         <GameSection
           title="未開賽"
           games={upcomingGames}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, HStack, Stack, Tabs } from "@chakra-ui/react";
+import { Box, Stack, Tabs } from "@chakra-ui/react";
 import { useState } from "react";
 import type { GameBoxscore } from "../../types/games";
 import { TeamStatsTable } from "./TeamStatsTable";
@@ -24,7 +24,13 @@ export function TeamStatsSection({ teams }: { teams: GameBoxscore["teams"] }) {
           ))}
         </Tabs.List>
       </Tabs.Root>
-      <HStack align="stretch" gap={4} mt={4} w="full">
+      <Stack
+        align="stretch"
+        direction={{ base: "column", xl: "row" }}
+        gap={4}
+        mt={4}
+        w="full"
+      >
         <Box display="flex" flex="1">
           <TeamStatsTable
             title="基本數據"
@@ -41,7 +47,7 @@ export function TeamStatsSection({ teams }: { teams: GameBoxscore["teams"] }) {
             rows={advancedStatRows}
           />
         </Box>
-      </HStack>
+      </Stack>
     </Stack>
   );
 }
