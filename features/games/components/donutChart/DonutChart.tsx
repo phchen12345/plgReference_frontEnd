@@ -36,8 +36,13 @@ export function DonutChart({ title, teams, statKey }: DonutChartProps) {
       <Box justifyItems="center" alignItems="center">
         <Text>{title}</Text>
       </Box>
-      <HStack justify="center" w="full" minW={0}>
-        <VStack gap={0} w={{ base: "72px", md: "96px" }} flexShrink={0} align="center">
+      <HStack justify="center" minW={0}>
+        <VStack
+          gap={0}
+          w={{ base: "72px", md: "96px" }}
+          flexShrink={0}
+          align="center"
+        >
           <Text
             fontSize={{ base: "3xl", md: "4xl" }}
             color={getTeamColor(teams.away.team).solid}
@@ -57,7 +62,11 @@ export function DonutChart({ title, teams, statKey }: DonutChartProps) {
             {teams.away.team.shortName}
           </Text>
         </VStack>
-        <Chart.Root boxSize={{ base: "140px", md: "180px" }} chart={chart} mx="auto">
+        <Chart.Root
+          boxSize={{ base: "140px", md: "180px" }}
+          chart={chart}
+          mx="auto"
+        >
           <PieChart responsive>
             <Tooltip
               cursor={false}
@@ -80,7 +89,12 @@ export function DonutChart({ title, teams, statKey }: DonutChartProps) {
             />
           </PieChart>
         </Chart.Root>
-        <VStack gap={0} w={{ base: "72px", md: "96px" }} flexShrink={0} align="center">
+        <VStack
+          gap={0}
+          w={{ base: "72px", md: "96px" }}
+          flexShrink={0}
+          align="center"
+        >
           <Text
             fontSize={{ base: "3xl", md: "4xl" }}
             color={getTeamColor(teams.home.team).solid}
