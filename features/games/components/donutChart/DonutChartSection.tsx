@@ -26,7 +26,7 @@ const DonutChart = dynamic(
 export function DonutChartSection({ teams }: { teams: GameBoxscore["teams"] }) {
   return (
     <SimpleGrid
-      columns={{ base: 1, md: 3 }}
+      columns={{ base: 1, lg: 3 }}
       gap={4}
       w="full"
       my={4}
