@@ -14,7 +14,10 @@ export default function ScheduleBoard({ games }: Props) {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const favoriteTeams = useFavoriteTeamsStore((state) => state.favoriteTeams);
-  const favoriteTeamIds = favoriteTeams.map((team) => team.id);
+  const favoriteTeamIds = useMemo(
+    () => favoriteTeams.map((team) => team.id),
+    [favoriteTeams],
+  );
 
   const teamCollection = useMemo(() => {
     const teamMap = new Map<string, string>();
