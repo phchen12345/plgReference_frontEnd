@@ -10,6 +10,7 @@ const SEASON = "2025-26";
 
 export function formatGameDate(gameDate: string) {
   return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
     month: "2-digit",
     day: "2-digit",
     weekday: "short",
