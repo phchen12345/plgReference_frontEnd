@@ -57,6 +57,11 @@ export function TeamStatsTable({
               alt={teams.away.team.shortName}
               width={18}
               height={18}
+              style={{
+                width: "18px",
+                height: "18px",
+                objectFit: "contain",
+              }}
             />
             <Text>{teams.away.team.shortName}</Text>
           </HStack>
@@ -67,6 +72,11 @@ export function TeamStatsTable({
               alt={teams.home.team.shortName}
               width={18}
               height={18}
+              style={{
+                width: "18px",
+                height: "18px",
+                objectFit: "contain",
+              }}
             />
             <Text>{teams.home.team.shortName}</Text>
           </HStack>

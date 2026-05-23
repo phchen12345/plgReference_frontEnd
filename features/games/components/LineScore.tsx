@@ -61,7 +61,11 @@ export function LineScore({ teams }: LineScoreProps) {
                     alt={row.team}
                     width={24}
                     height={24}
-                    objectFit="contain"
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      objectFit: "contain",
+                    }}
                   />
                   <Text fontWeight="semibold" truncate>
                     {row.team}

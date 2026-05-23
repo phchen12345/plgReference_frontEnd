@@ -32,10 +32,14 @@ export function PointsDistributed({ teams }: LineScoreProps) {
               <HStack>
                 <Image
                   src={teams.away.team.logoUrl}
-                  alt={teams.away.team.logoUrl}
+                  alt={teams.away.team.name}
                   width={24}
                   height={24}
-                  objectFit="contain"
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    objectFit: "contain",
+                  }}
                 />
                 <Text>{teams.away.team.name}</Text>
               </HStack>
@@ -57,10 +61,14 @@ export function PointsDistributed({ teams }: LineScoreProps) {
               <HStack>
                 <Image
                   src={teams.home.team.logoUrl}
-                  alt={teams.home.team.logoUrl}
+                  alt={teams.home.team.name}
                   width={24}
                   height={24}
-                  objectFit="contain"
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    objectFit: "contain",
+                  }}
                 />
                 <Text>{teams.home.team.name}</Text>
               </HStack>

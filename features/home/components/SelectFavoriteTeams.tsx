@@ -30,6 +30,7 @@ export default function SelectFavoriteTeams({ uniqueTeams }: Props) {
                   key={team.id}
                   checked={checked}
                   onCheckedChange={() => toggleFavoriteTeam(team)}
+                  cursor="pointer"
                 >
                   <CheckboxCard.HiddenInput />
                   <CheckboxCard.Control>
@@ -41,6 +42,11 @@ export default function SelectFavoriteTeams({ uniqueTeams }: Props) {
                           alt={team.name}
                           width={48}
                           height={48}
+                          style={{
+                            width: "48px",
+                            height: "48px",
+                            objectFit: "contain",
+                          }}
                         ></Image>
                       </CheckboxCard.Label>
                     </CheckboxCard.Content>

@@ -58,6 +58,11 @@ export function Header() {
                     alt={team.name}
                     width={48}
                     height={48}
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      objectFit: "contain",
+                    }}
                   />
                 </Box>
               ))}

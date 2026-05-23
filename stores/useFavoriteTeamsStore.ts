@@ -10,9 +10,7 @@ type FavoriteTeam = {
 
 type FavoriteTeamsState = {
   favoriteTeams: FavoriteTeam[];
-
   toggleFavoriteTeam: (team: FavoriteTeam) => void;
-
   isFavoriteTeam: (teamId: number) => boolean;
 };
 
@@ -20,7 +18,6 @@ export const useFavoriteTeamsStore = create<FavoriteTeamsState>()(
   persist(
     (set, get) => ({
       favoriteTeams: [],
-      filterMode: "all",
 
       toggleFavoriteTeam: (team) =>
         set((state) => {

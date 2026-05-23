@@ -51,6 +51,11 @@ export function ScoreBoard({ game }: ScoreBoardProps) {
               height={56}
               src={game.awayTeam.logoUrl}
               alt={game.awayTeam.name}
+              style={{
+                width: "56px",
+                height: "56px",
+                objectFit: "contain",
+              }}
             />
           </HStack>
 
@@ -76,6 +81,11 @@ export function ScoreBoard({ game }: ScoreBoardProps) {
               height={56}
               src={game.homeTeam.logoUrl}
               alt={game.homeTeam.name}
+              style={{
+                width: "56px",
+                height: "56px",
+                objectFit: "contain",
+              }}
             />
             <Text
               fontSize="2xl"

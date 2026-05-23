@@ -101,6 +101,11 @@ export function PlayerStatsTable({
             alt={team.shortName}
             width={18}
             height={18}
+            style={{
+              width: "18px",
+              height: "18px",
+              objectFit: "contain",
+            }}
           />
           <Text fontSize="sm" fontWeight="semibold">
             {title}

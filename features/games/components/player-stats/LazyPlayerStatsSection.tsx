@@ -2,9 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { Box, Skeleton, Stack } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
 import type { GameBoxscore } from "../../types/games";
 
+// 將 Skeleton 設定為 dynamic 的 loading 狀態
 const PlayerStatsSection = dynamic(
   () => import("./PlayerStatsSection").then((mod) => mod.PlayerStatsSection),
   {
@@ -23,47 +23,17 @@ export function LazyPlayerStatsSection({
 }: {
   teams: GameBoxscore["teams"];
 }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [shouldLoad, setShouldLoad] = useState(false);
-
-  useEffect(() => {
-    if (shouldLoad) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true);
-          observer.disconnect();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "400px",
-        threshold: 0,
-      },
-    );
-
-    const element = rootRef.current;
-
-    if (element) {
-      observer.observe(element);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [shouldLoad]);
-
   return (
-    <Box ref={rootRef} minH="320px">
-      {shouldLoad ? (
-        <PlayerStatsSection teams={teams} />
-      ) : (
-        <Stack gap={3} mt={4}>
-          <Skeleton height="36px" />
-          <Skeleton height="260px" />
-        </Stack>
-      )}
+    <Box
+      minH="320px"
+      style={{
+        // 1. 告訴瀏覽器這區塊是獨立的，畫面外時跳過渲染
+        contentVisibility: "auto",
+        // 2. 給瀏覽器一個預估高度，避免滾動條彈跳
+        containIntrinsicSize: "auto 320px",
+      }}
+    >
+      <PlayerStatsSection teams={teams} />
     </Box>
   );
 }
