@@ -43,6 +43,7 @@ export const useFavoriteTeamsStore = create<FavoriteTeamsState>()(
     }),
     {
       name: "favorite-teams-store",
+      skipHydration: true,
     },
   ),
 );

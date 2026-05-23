@@ -27,6 +27,7 @@ export const useColorModeStore = create<ColorModeState>()(
     }),
     {
       name: "color-mode",
+      skipHydration: true,
     },
   ),
 );
