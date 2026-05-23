@@ -59,16 +59,32 @@ export default function ScheduleBoard({ games }: Props) {
     );
   }, [games, selectedFilter, favoriteTeamIds]);
 
-  const finishedGames = [...filteredGames]
-    .filter((game) => game.status === "final")
-    .sort(
-      (a, b) =>
-        new Date(`${b.gameDate}T${b.gameTime}`).getTime() -
-        new Date(`${a.gameDate}T${a.gameTime}`).getTime(),
+  // const finishedGames = [...filteredGames]
+  //   .filter((game) => game.status === "final")
+  //   .sort(
+  //     (a, b) =>
+  //       new Date(`${b.gameDate}T${b.gameTime}`).getTime() -
+  //       new Date(`${a.gameDate}T${a.gameTime}`).getTime(),
+  //   );
+  // const upcomingGames = filteredGames.filter(
+  //   (game) => game.status === "scheduled",
+  // );
+
+  const { upcomingGames, finishedGames } = useMemo(() => {
+    const finishedGames = [...filteredGames]
+      .filter((game) => game.status === "final")
+      .sort(
+        (a, b) =>
+          new Date(`${b.gameDate}T${b.gameTime}`).getTime() -
+          new Date(`${a.gameDate}T${a.gameTime}`).getTime(),
+      );
+
+    const upcomingGames = filteredGames.filter(
+      (game) => game.status === "scheduled",
     );
-  const upcomingGames = filteredGames.filter(
-    (game) => game.status === "scheduled",
-  );
+
+    return { upcomingGames, finishedGames };
+  }, [filteredGames]);
 
   return (
     <Stack gap={6}>

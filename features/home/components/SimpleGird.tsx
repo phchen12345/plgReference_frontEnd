@@ -2,7 +2,9 @@ import { Badge, Box, Flex, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { GameCard } from "./GameCard";
 import type { ScheduleGame } from "@/features/home/types/schedules";
 
-export default function GameSection({
+import { memo } from "react";
+
+function GameSection({
   title,
   games,
   emptyText,
@@ -46,3 +48,5 @@ export default function GameSection({
     </Stack>
   );
 }
+
+export default memo(GameSection);
