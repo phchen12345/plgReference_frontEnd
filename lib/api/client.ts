@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { ApiError } from "./error";
 import type { ApiResponse } from "./response";
 
@@ -24,6 +25,12 @@ export async function requestJson<T>(
           }
         : undefined,
   });
+
+  // 1. 先攔截 HTTP 狀態碼錯誤
+  if (!res.ok) {
+    noStore(); // 關鍵：強制宣告此請求為動態，不允許 Next.js 快取這次的結果
+    throw new ApiError("API request failed", res.status);
+  }
 
   let json: ApiResponse<T>;
 
