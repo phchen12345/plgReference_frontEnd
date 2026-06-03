@@ -41,6 +41,7 @@ export type ScheduleGame = {
   homeTeam: Team;
   awayTeam: Team;
   venue: string;
+  gameCode: string;
 };
 
 export type ScheduleResponse = {

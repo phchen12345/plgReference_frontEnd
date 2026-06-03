@@ -4,13 +4,31 @@ import { formatGameDate, formatGameTime, formatScore } from "../page";
 import { Team } from "../components/Team";
 import Link from "next/link";
 
-const statusLabels = {
-  regular_season: "例行賽",
-  playoffs: "季後賽",
-  finals: "總冠軍賽",
-} satisfies Record<ScheduleGame["stage"], string>;
-
 export function GameCard({ game }: { game: ScheduleGame }) {
+  const stageColorPalette = {
+    regular_season: "gray",
+    finals: "yellow",
+    playoffs: "red",
+  };
+
+  const colorPalette = stageColorPalette[game.stage] ?? "gray";
+
+  function formatGameCode(gameCode: string) {
+    if (gameCode.startsWith("FINALS Game")) {
+      return gameCode.replace("FINALS Game", "總冠軍賽 G");
+    }
+
+    if (gameCode.startsWith("PLAYOFFS Game")) {
+      return gameCode.replace("PLAYOFFS Game", "季後賽 G");
+    }
+
+    if (/^G\d+$/.test(gameCode)) {
+      return `例行賽 ${gameCode}`;
+    }
+
+    return gameCode;
+  }
+
   return (
     <Link
       href={`/games/${game.id}`}
@@ -49,11 +67,8 @@ export function GameCard({ game }: { game: ScheduleGame }) {
             <Text textStyle="xs" color="gray.500" _dark={{ color: "gray.400" }}>
               {game.venue}
             </Text>
-            <Badge
-              alignSelf="flex-end"
-              colorPalette={game.stage === "regular_season" ? "gray" : "red"}
-            >
-              {statusLabels[game.stage]}
+            <Badge alignSelf="flex-end" colorPalette={colorPalette}>
+              {formatGameCode(game.gameCode)}
             </Badge>
           </Stack>
         </Flex>
