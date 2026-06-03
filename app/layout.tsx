@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 import { Header } from "@/components/layout/Header";
 import { ColorModeSync } from "@/components/theme/ColorModeSync";
 import Footer from "@/components/layout/Footer";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 export const metadata: Metadata = {
   title: "plg_reference",
@@ -23,6 +24,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <ChatWidget />
         </Providers>
 
         <Script
