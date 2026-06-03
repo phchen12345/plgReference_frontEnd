@@ -1,6 +1,10 @@
 import { Box, Flex, Stack, Text, Badge } from "@chakra-ui/react";
 import type { ScheduleGame } from "@/features/home/types/schedules";
-import { formatGameDate, formatGameTime, formatScore } from "../page";
+import {
+  formatGameDate,
+  formatGameTime,
+  formatScore,
+} from "@/features/home/utils/scheduleFormatters";
 import { Team } from "../components/Team";
 import Link from "next/link";
 

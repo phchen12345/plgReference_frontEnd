@@ -1,17 +1,25 @@
-import { Badge, Box, Flex, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { GameCard } from "./GameCard";
 import type { ScheduleGame } from "@/features/home/types/schedules";
 
 import { memo } from "react";
+import { SchedulePagination } from "./SchedulePagination";
+import { Pagination } from "@/lib/api/response";
 
 function GameSection({
   title,
   games,
   emptyText,
+  pagination,
+  isPaginationLoading = false,
+  onPageChange,
 }: {
   title: string;
   games: ScheduleGame[];
   emptyText: string;
+  pagination: Pagination | null;
+  isPaginationLoading?: boolean;
+  onPageChange?: (page: number) => void;
 }) {
   return (
     <Stack gap={4} w="full">
@@ -19,7 +27,7 @@ function GameSection({
         <Text as="h2" fontSize="xl" fontWeight="bold">
           {title}
         </Text>
-        <Badge colorPalette="gray">{games.length} 場</Badge>
+        {/* <Badge colorPalette="gray">{games.length} 場</Badge> */}
       </Flex>
 
       {games.length === 0 ? (
@@ -43,6 +51,14 @@ function GameSection({
           {games.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
+          {pagination && onPageChange ? (
+            <SchedulePagination
+              page={pagination.page}
+              pageCount={pagination.pageCount}
+              isLoading={isPaginationLoading}
+              onPageChange={onPageChange}
+            />
+          ) : null}
         </SimpleGrid>
       )}
     </Stack>

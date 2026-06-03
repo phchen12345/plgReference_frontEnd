@@ -1,3 +1,5 @@
+import type { PaginatedData } from "@/lib/api/response";
+
 export type League = {
   id: number;
   code: string;
@@ -30,8 +32,12 @@ export type ScheduleGame = {
   leagueId: number;
   seasonId: number;
   externalGameId: string;
+  gameCode: string;
   gameDate: string;
   gameTime: string;
+  venue: string;
+  attendance: number | null;
+  capacity: number | null;
   stage: GameStage;
   status: GameStatus;
   homeScore: number | null;
@@ -40,10 +46,6 @@ export type ScheduleGame = {
   season: Season;
   homeTeam: Team;
   awayTeam: Team;
-  venue: string;
-  gameCode: string;
 };
 
-export type ScheduleResponse = {
-  data: ScheduleGame[];
-};
+export type ScheduleResponse = PaginatedData<ScheduleGame>;

@@ -1,11 +1,13 @@
-import { requestJson } from "@/lib/api/client";
+"use client";
+
+import type { ApiResponse } from "@/lib/api/response";
 import type { GameStatus, ScheduleResponse } from "../types/schedules";
 
-type GetScheduleParams = {
+type GetClientScheduleParams = {
   leagueCode: string;
   season: string;
-  teamId?: number;
   status?: GameStatus;
+  teamId?: number;
   page?: number;
   limit?: number;
   sort?: string;
@@ -14,7 +16,7 @@ type GetScheduleParams = {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function getSchedule({
+export async function getClientSchedule({
   leagueCode,
   season,
   status,
@@ -23,9 +25,12 @@ export async function getSchedule({
   sort,
   order,
   teamId,
-}: GetScheduleParams): Promise<ScheduleResponse> {
-  const offset = (page - 1) * limit;
+}: GetClientScheduleParams): Promise<ScheduleResponse> {
+  if (!API_BASE_URL) {
+    throw new Error("Missing NEXT_PUBLIC_API_BASE_URL");
+  }
 
+  const offset = (page - 1) * limit;
   const searchParams = new URLSearchParams({
     leagueCode,
     season,
@@ -49,10 +54,12 @@ export async function getSchedule({
     searchParams.set("teamId", String(teamId));
   }
 
-  return requestJson<ScheduleResponse>(
-    `${API_BASE_URL}/api/schedule?${searchParams}`,
-    {
-      revalidate: 60,
-    },
-  );
+  const res = await fetch(`${API_BASE_URL}/api/schedule?${searchParams}`);
+  const json: ApiResponse<ScheduleResponse> = await res.json();
+
+  if (!res.ok || json.success === false) {
+    throw new Error(json.success === false ? json.message : "賽程資料讀取失敗");
+  }
+
+  return json.data;
 }

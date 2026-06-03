@@ -14,12 +14,12 @@ import { LazyPlayerStatsSection } from "@/features/games/components/player-stats
 import { getSchedule } from "@/features/home/api/schedulesApi";
 
 export async function generateStaticParams() {
-  const games = await getSchedule({
+  const scheduleData = await getSchedule({
     leagueCode: "PLG",
     season: "2025-26",
   });
 
-  return games
+  return scheduleData.items
     .filter((game) => game.status === "final")
     .map((game) => ({
       gameId: String(game.id),

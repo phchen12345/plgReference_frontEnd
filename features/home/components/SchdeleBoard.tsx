@@ -5,12 +5,18 @@ import { createListCollection, Portal, Select, Stack } from "@chakra-ui/react";
 import type { ScheduleGame } from "@/features/home/types/schedules";
 import GameSection from "./SimpleGird";
 import { useFavoriteTeamsStore } from "@/stores/useFavoriteTeamsStore";
+import type { ScheduleResponse } from "@/features/home/types/schedules";
+import { FinishedGamesSection } from "./FinishedGamesSection";
 
 type Props = {
-  games: ScheduleGame[];
+  upcomingGames: ScheduleGame[];
+  initialFinishedData: ScheduleResponse;
 };
 
-export default function ScheduleBoard({ games }: Props) {
+export default function ScheduleBoard({
+  upcomingGames,
+  initialFinishedData,
+}: Props) {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const favoriteTeams = useFavoriteTeamsStore((state) => state.favoriteTeams);
@@ -19,10 +25,11 @@ export default function ScheduleBoard({ games }: Props) {
     [favoriteTeams],
   );
 
+  //從未開賽和已完賽資料裡抓出所有主隊、客隊
   const teamCollection = useMemo(() => {
     const teamMap = new Map<string, string>();
 
-    for (const game of games) {
+    for (const game of [...upcomingGames, ...initialFinishedData.items]) {
       teamMap.set(String(game.homeTeam.id), game.homeTeam.shortName);
       teamMap.set(String(game.awayTeam.id), game.awayTeam.shortName);
     }
@@ -37,54 +44,39 @@ export default function ScheduleBoard({ games }: Props) {
         })),
       ],
     });
-  }, [games]);
+  }, [upcomingGames, initialFinishedData.items]);
 
-  const filteredGames = useMemo(() => {
-    if (selectedFilter === "all") {
-      return games;
-    }
+  const filterGames = useMemo(() => {
+    return (games: ScheduleGame[]) => {
+      if (selectedFilter === "all") {
+        return games;
+      }
 
-    if (selectedFilter === "favorites") {
+      if (selectedFilter === "favorites") {
+        return games.filter(
+          (game) =>
+            favoriteTeamIds.includes(game.homeTeam.id) ||
+            favoriteTeamIds.includes(game.awayTeam.id),
+        );
+      }
+
       return games.filter(
         (game) =>
-          favoriteTeamIds.includes(game.homeTeam.id) ||
-          favoriteTeamIds.includes(game.awayTeam.id),
+          String(game.homeTeam.id) === selectedFilter ||
+          String(game.awayTeam.id) === selectedFilter,
       );
-    }
+    };
+  }, [selectedFilter, favoriteTeamIds]);
 
-    return games.filter(
-      (game) =>
-        String(game.homeTeam.id) === selectedFilter ||
-        String(game.awayTeam.id) === selectedFilter,
-    );
-  }, [games, selectedFilter, favoriteTeamIds]);
+  const filteredUpcomingGames = useMemo(
+    () => filterGames(upcomingGames),
+    [filterGames, upcomingGames],
+  );
 
-  // const finishedGames = [...filteredGames]
-  //   .filter((game) => game.status === "final")
-  //   .sort(
-  //     (a, b) =>
-  //       new Date(`${b.gameDate}T${b.gameTime}`).getTime() -
-  //       new Date(`${a.gameDate}T${a.gameTime}`).getTime(),
-  //   );
-  // const upcomingGames = filteredGames.filter(
-  //   (game) => game.status === "scheduled",
-  // );
-
-  const { upcomingGames, finishedGames } = useMemo(() => {
-    const finishedGames = [...filteredGames]
-      .filter((game) => game.status === "final")
-      .sort(
-        (a, b) =>
-          new Date(`${b.gameDate}T${b.gameTime}`).getTime() -
-          new Date(`${a.gameDate}T${a.gameTime}`).getTime(),
-      );
-
-    const upcomingGames = filteredGames.filter(
-      (game) => game.status === "scheduled",
-    );
-
-    return { upcomingGames, finishedGames };
-  }, [filteredGames]);
+  const selectedTeamId =
+    selectedFilter !== "all" && selectedFilter !== "favorites"
+      ? Number(selectedFilter)
+      : undefined;
 
   return (
     <Stack gap={6}>
@@ -92,7 +84,9 @@ export default function ScheduleBoard({ games }: Props) {
         collection={teamCollection}
         value={[selectedFilter]}
         onValueChange={(details) => {
-          setSelectedFilter(details.value[0] ?? "all");
+          const nextFilter = details.value[0] ?? "all";
+
+          setSelectedFilter(nextFilter);
         }}
         size="sm"
         width={{ base: "full", md: "320px" }}
@@ -127,14 +121,15 @@ export default function ScheduleBoard({ games }: Props) {
       <Stack gap={8} direction={{ base: "column", xl: "row" }}>
         <GameSection
           title="未開賽"
-          games={upcomingGames}
+          games={filteredUpcomingGames}
           emptyText="目前沒有未開賽賽程"
+          pagination={null}
         />
 
-        <GameSection
-          title="已完賽"
-          games={finishedGames}
-          emptyText="目前沒有已完賽賽程"
+        <FinishedGamesSection
+          // key={selectedFilter}
+          initialData={initialFinishedData}
+          selectedTeamId={selectedTeamId}
         />
       </Stack>
     </Stack>
