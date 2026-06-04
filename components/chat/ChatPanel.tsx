@@ -145,13 +145,27 @@ export function ChatPanel() {
         ) : (
           messages.map((message) => (
             <Box key={message.id}>
-              <Text
-                fontSize="sm"
-                color="gray.500"
-                _dark={{ color: "gray.400" }}
-              >
-                {message.nickname}
-              </Text>
+              <HStack gap={2}>
+                <Text
+                  fontSize="sm"
+                  color="gray.500"
+                  _dark={{ color: "gray.400" }}
+                >
+                  {message.nickname}
+                </Text>
+
+                <Text
+                  fontSize="xs"
+                  color="gray.400"
+                  _dark={{ color: "gray.500" }}
+                >
+                  {new Date(message.createdAt).toLocaleTimeString("zh-TW", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Text>
+              </HStack>
+
               <Text>{message.text}</Text>
             </Box>
           ))
