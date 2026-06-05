@@ -5,7 +5,10 @@ import { getTeamColor } from "../../utils/teamColors";
 import { TeamStatsCompareRow } from "./TeamStatsCompareRow";
 import type { StatRow } from "./teamStats.config";
 import type { StatView } from "./teamStats.utils";
-import { getTeamStatsByView } from "./teamStats.utils";
+import {
+  getInferredOvertimePeriod,
+  getTeamStatsByView,
+} from "./teamStats.utils";
 
 type TeamStatsTableProps = {
   title: string;
@@ -20,8 +23,17 @@ export function TeamStatsTable({
   view,
   rows,
 }: TeamStatsTableProps) {
-  const awayStats = getTeamStatsByView(teams.away, view);
-  const homeStats = getTeamStatsByView(teams.home, view);
+  const inferredOvertimePeriod = getInferredOvertimePeriod(teams);
+  const awayStats = getTeamStatsByView(
+    teams.away,
+    view,
+    inferredOvertimePeriod,
+  );
+  const homeStats = getTeamStatsByView(
+    teams.home,
+    view,
+    inferredOvertimePeriod,
+  );
   const awayTeamColor = getTeamColor(teams.away.team);
   const homeTeamColor = getTeamColor(teams.home.team);
 

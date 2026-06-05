@@ -138,6 +138,7 @@ function estimatePossessions(stats: TeamBoxscoreStats | null) {
 function getViewMinutes(view: StatView) {
   if (view === "firstHalf" || view === "secondHalf") return 20;
   if (view === "total") return 40;
+  if (Number(view) > 4) return 5;
   return 10;
 }
 
