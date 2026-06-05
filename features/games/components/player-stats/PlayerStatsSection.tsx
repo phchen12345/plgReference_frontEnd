@@ -1,9 +1,10 @@
 "use client";
 
 import { Grid, Stack, Tabs, Text } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { useState } from "react";
 import type { GameBoxscore } from "../../types/games";
-import { statViews, type StatView } from "../team-stats/teamStats.utils";
+import { getStatViews, type StatView } from "../team-stats/teamStats.utils";
 import { PlayerStatsTable } from "./PlayerStatsTable";
 import {
   advancedPlayerColumns,
@@ -16,6 +17,7 @@ export function PlayerStatsSection({
   teams: GameBoxscore["teams"];
 }) {
   const [view, setView] = useState<StatView>("total");
+  const statViews = useMemo(() => getStatViews(teams), [teams]);
 
   return (
     <Stack gap={3} mt={4}>

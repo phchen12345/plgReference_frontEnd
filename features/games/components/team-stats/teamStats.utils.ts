@@ -1,18 +1,39 @@
 import type { GameBoxscore, TeamBoxscoreStats } from "../../types/games";
 
-export const statViews = [
+const baseStatViews = [
   { label: "全部", value: "total" },
   { label: "上半場", value: "firstHalf" },
   { label: "下半場", value: "secondHalf" },
-  { label: "Q1", value: "1" },
-  { label: "Q2", value: "2" },
-  { label: "Q3", value: "3" },
-  { label: "Q4", value: "4" },
 ] as const;
 
-export type StatView = (typeof statViews)[number]["value"];
+export type StatView =
+  | (typeof baseStatViews)[number]["value"]
+  | `${number}`;
 
 type TeamBoxscore = GameBoxscore["teams"]["away"];
+
+export function formatPeriodLabel(period: number) {
+  return period <= 4 ? `Q${period}` : `OT${period - 4}`;
+}
+
+export function getGamePeriods(teams: GameBoxscore["teams"]) {
+  return Array.from(
+    new Set([
+      ...teams.away.periods.map((item) => item.period),
+      ...teams.home.periods.map((item) => item.period),
+    ]),
+  ).sort((first, second) => first - second);
+}
+
+export function getStatViews(teams: GameBoxscore["teams"]) {
+  return [
+    ...baseStatViews,
+    ...getGamePeriods(teams).map((period) => ({
+      label: formatPeriodLabel(period),
+      value: String(period) as `${number}`,
+    })),
+  ];
+}
 
 export function getTeamStatsByView(
   team: TeamBoxscore,

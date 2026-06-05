@@ -1,10 +1,60 @@
 import { Box, HStack, Table, Text } from "@chakra-ui/react";
 import type { GameBoxscore } from "@/features/games/types/games";
 import Image from "next/image";
+import { formatPeriodLabel } from "./team-stats/teamStats.utils";
 
 type LineScoreProps = {
   teams: GameBoxscore["teams"];
 };
+
+type LineScorePeriod = {
+  period: number;
+  inferred: boolean;
+};
+
+type LineScoreRow = {
+  team: string;
+  logoUrl: string;
+  periods: GameBoxscore["teams"]["away"]["periods"];
+  total: number | null | undefined;
+};
+
+function getKnownPeriodTotal(row: LineScoreRow) {
+  return row.periods.reduce(
+    (sum, item) => sum + (item.stats.points ?? 0),
+    0,
+  );
+}
+
+function getInferredOvertimeScore(row: LineScoreRow) {
+  if (row.total == null) {
+    return null;
+  }
+
+  const overtimeScore = row.total - getKnownPeriodTotal(row);
+
+  return overtimeScore > 0 ? overtimeScore : null;
+}
+
+function getLineScorePeriods(rows: LineScoreRow[]): LineScorePeriod[] {
+  const knownPeriods = Array.from(
+    new Set(rows.flatMap((row) => row.periods.map((item) => item.period))),
+  ).sort((first, second) => first - second);
+  const hasRegulationPeriods = [1, 2, 3, 4].every((period) =>
+    knownPeriods.includes(period),
+  );
+  const needsInferredOvertime =
+    hasRegulationPeriods &&
+    rows.some((row) => getInferredOvertimeScore(row) != null);
+  const inferredPeriod = Math.max(4, ...knownPeriods) + 1;
+
+  return [
+    ...knownPeriods.map((period) => ({ period, inferred: false })),
+    ...(needsInferredOvertime
+      ? [{ period: inferredPeriod, inferred: true }]
+      : []),
+  ];
+}
 
 export function LineScore({ teams }: LineScoreProps) {
   const rows = [
@@ -21,6 +71,7 @@ export function LineScore({ teams }: LineScoreProps) {
       total: teams.home.stats?.points,
     },
   ];
+  const periods = getLineScorePeriods(rows);
 
   return (
     <Box
@@ -37,10 +88,11 @@ export function LineScore({ teams }: LineScoreProps) {
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>球隊</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign="center">Q1</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign="center">Q2</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign="center">Q3</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign="center">Q4</Table.ColumnHeader>
+            {periods.map((period) => (
+              <Table.ColumnHeader key={period.period} textAlign="center">
+                {formatPeriodLabel(period.period)}
+              </Table.ColumnHeader>
+            ))}
             <Table.ColumnHeader textAlign="right">總分</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -73,14 +125,17 @@ export function LineScore({ teams }: LineScoreProps) {
                 </HStack>
               </Table.Cell>
 
-              {[1, 2, 3, 4].map((period) => {
+              {periods.map((period) => {
                 const periodStats = row.periods.find(
-                  (item) => item.period === period,
+                  (item) => item.period === period.period,
                 );
+                const score = period.inferred
+                  ? getInferredOvertimeScore(row)
+                  : periodStats?.stats.points;
 
                 return (
-                  <Table.Cell key={period} textAlign="center">
-                    {periodStats?.stats.points ?? "-"}
+                  <Table.Cell key={period.period} textAlign="center">
+                    {score ?? "-"}
                   </Table.Cell>
                 );
               })}
