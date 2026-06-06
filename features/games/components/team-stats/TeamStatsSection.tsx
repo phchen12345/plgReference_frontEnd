@@ -6,11 +6,11 @@ import { useState } from "react";
 import type { GameBoxscore } from "../../types/games";
 import { TeamStatsTable } from "./TeamStatsTable";
 import { advancedStatRows, basicStatRows } from "./teamStats.config";
-import { getTeamStatViews, type StatView } from "./teamStats.utils";
+import { getStatViews, type StatView } from "./teamStats.utils";
 
 export function TeamStatsSection({ teams }: { teams: GameBoxscore["teams"] }) {
   const [view, setView] = useState<StatView>("total");
-  const statViews = useMemo(() => getTeamStatViews(teams), [teams]);
+  const statViews = useMemo(() => getStatViews(teams), [teams]);
 
   return (
     <Stack gap={4}>

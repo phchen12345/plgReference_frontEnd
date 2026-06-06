@@ -7,11 +7,6 @@ type LineScoreProps = {
   teams: GameBoxscore["teams"];
 };
 
-type LineScorePeriod = {
-  period: number;
-  inferred: boolean;
-};
-
 type LineScoreRow = {
   team: string;
   logoUrl: string;
@@ -19,41 +14,10 @@ type LineScoreRow = {
   total: number | null | undefined;
 };
 
-function getKnownPeriodTotal(row: LineScoreRow) {
-  return row.periods.reduce(
-    (sum, item) => sum + (item.stats.points ?? 0),
-    0,
-  );
-}
-
-function getInferredOvertimeScore(row: LineScoreRow) {
-  if (row.total == null) {
-    return null;
-  }
-
-  const overtimeScore = row.total - getKnownPeriodTotal(row);
-
-  return overtimeScore > 0 ? overtimeScore : null;
-}
-
-function getLineScorePeriods(rows: LineScoreRow[]): LineScorePeriod[] {
-  const knownPeriods = Array.from(
+function getLineScorePeriods(rows: LineScoreRow[]) {
+  return Array.from(
     new Set(rows.flatMap((row) => row.periods.map((item) => item.period))),
   ).sort((first, second) => first - second);
-  const hasRegulationPeriods = [1, 2, 3, 4].every((period) =>
-    knownPeriods.includes(period),
-  );
-  const needsInferredOvertime =
-    hasRegulationPeriods &&
-    rows.some((row) => getInferredOvertimeScore(row) != null);
-  const inferredPeriod = Math.max(4, ...knownPeriods) + 1;
-
-  return [
-    ...knownPeriods.map((period) => ({ period, inferred: false })),
-    ...(needsInferredOvertime
-      ? [{ period: inferredPeriod, inferred: true }]
-      : []),
-  ];
 }
 
 export function LineScore({ teams }: LineScoreProps) {
@@ -89,8 +53,8 @@ export function LineScore({ teams }: LineScoreProps) {
           <Table.Row>
             <Table.ColumnHeader>球隊</Table.ColumnHeader>
             {periods.map((period) => (
-              <Table.ColumnHeader key={period.period} textAlign="center">
-                {formatPeriodLabel(period.period)}
+              <Table.ColumnHeader key={period} textAlign="center">
+                {formatPeriodLabel(period)}
               </Table.ColumnHeader>
             ))}
             <Table.ColumnHeader textAlign="right">總分</Table.ColumnHeader>
@@ -127,15 +91,12 @@ export function LineScore({ teams }: LineScoreProps) {
 
               {periods.map((period) => {
                 const periodStats = row.periods.find(
-                  (item) => item.period === period.period,
+                  (item) => item.period === period,
                 );
-                const score = period.inferred
-                  ? getInferredOvertimeScore(row)
-                  : periodStats?.stats.points;
 
                 return (
-                  <Table.Cell key={period.period} textAlign="center">
-                    {score ?? "-"}
+                  <Table.Cell key={period} textAlign="center">
+                    {periodStats?.stats.points ?? "-"}
                   </Table.Cell>
                 );
               })}

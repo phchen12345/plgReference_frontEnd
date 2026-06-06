@@ -4,11 +4,7 @@ import { Grid, Stack, Tabs, Text } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { useState } from "react";
 import type { GameBoxscore } from "../../types/games";
-import {
-  getInferredOvertimePeriod,
-  getTeamStatViews,
-  type StatView,
-} from "../team-stats/teamStats.utils";
+import { getStatViews, type StatView } from "../team-stats/teamStats.utils";
 import { PlayerStatsTable } from "./PlayerStatsTable";
 import {
   advancedPlayerColumns,
@@ -21,11 +17,7 @@ export function PlayerStatsSection({
   teams: GameBoxscore["teams"];
 }) {
   const [view, setView] = useState<StatView>("total");
-  const statViews = useMemo(() => getTeamStatViews(teams), [teams]);
-  const inferredOvertimePeriod = useMemo(
-    () => getInferredOvertimePeriod(teams),
-    [teams],
-  );
+  const statViews = useMemo(() => getStatViews(teams), [teams]);
 
   return (
     <Stack gap={3} mt={4}>
@@ -56,7 +48,6 @@ export function PlayerStatsSection({
             team={teams.away.team}
             players={teams.away.players}
             view={view}
-            inferredOvertimePeriod={inferredOvertimePeriod}
             columns={basicPlayerColumns}
           />
           <PlayerStatsTable
@@ -64,7 +55,6 @@ export function PlayerStatsSection({
             team={teams.away.team}
             players={teams.away.players}
             view={view}
-            inferredOvertimePeriod={inferredOvertimePeriod}
             columns={advancedPlayerColumns}
           />
         </Stack>
@@ -78,7 +68,6 @@ export function PlayerStatsSection({
             team={teams.home.team}
             players={teams.home.players}
             view={view}
-            inferredOvertimePeriod={inferredOvertimePeriod}
             columns={basicPlayerColumns}
           />
           <PlayerStatsTable
@@ -86,7 +75,6 @@ export function PlayerStatsSection({
             team={teams.home.team}
             players={teams.home.players}
             view={view}
-            inferredOvertimePeriod={inferredOvertimePeriod}
             columns={advancedPlayerColumns}
           />
         </Stack>

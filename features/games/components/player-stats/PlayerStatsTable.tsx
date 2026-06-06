@@ -25,7 +25,6 @@ type PlayerStatsTableProps = {
   team: GameBoxscore["teams"]["away"]["team"];
   players: GameBoxscore["teams"]["away"]["players"];
   view: StatView;
-  inferredOvertimePeriod?: number | null;
   columns: ColumnDef<PlayerStatsRow>[];
 };
 
@@ -51,15 +50,14 @@ export function PlayerStatsTable({
   team,
   players,
   view,
-  inferredOvertimePeriod,
   columns,
 }: PlayerStatsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const teamColor = getTeamColor(team);
 
   const data = useMemo(
-    () => buildPlayerStatsRows(players, view, inferredOvertimePeriod),
-    [players, view, inferredOvertimePeriod],
+    () => buildPlayerStatsRows(players, view),
+    [players, view],
   );
 
   // eslint-disable-next-line react-hooks/incompatible-library
